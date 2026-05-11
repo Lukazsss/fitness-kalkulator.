@@ -49,7 +49,6 @@ export abstract class AktivitaZaznam {
     this.trvaniMin = trvaniMin;   // použití setteru pro validaci
   }
 
-  // ── Getter a setter pro trvaniMin ───────────────────────────────────────
 
   /** Vrátí délku trvání aktivity v minutách. */
   public get trvaniMin(): number {
@@ -263,9 +262,6 @@ export class SilovaAktivita extends AktivitaZaznam {
     );
   }
 
-  /**
-   * Přepisuje rodičovský getSouhrn() – přidává informaci o sériích a zátěži.
-   */
   public getSouhrn(): string {
     return (
       `[SILOVÁ] ${this.nazev} | ` +
