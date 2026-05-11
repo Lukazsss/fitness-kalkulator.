@@ -19,7 +19,7 @@ export type KatalogAktivity = {
 // Katalog dostupných aktivit – přidáním nové položky sem
 // se automaticky rozšíří celá aplikace bez změny kódu
 export const katalog: KatalogAktivity[] = [
-  { id: 1, typ: "kardio", nazev: "Běh",        metHodnota: 9.8 },
+  { id: 1, typ: "kardio", nazev: "Běh",         metHodnota: 9.8 },
   { id: 2, typ: "kardio", nazev: "Plavání",     metHodnota: 7.0 },
   { id: 3, typ: "kardio", nazev: "Cyklistika",  metHodnota: 6.8 },
   { id: 4, typ: "silova", nazev: "Posilování",  metHodnota: 5.0 },
