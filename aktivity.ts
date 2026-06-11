@@ -7,11 +7,11 @@
  *   ├── KardioAktivita           – výpočet dle MET vzorce
  *   └── SilovaAktivita           – výpočet dle objemu zátěže
  */
-
+ 
 // ─────────────────────────────────────────────────────────────────────────────
 // Abstraktní bázová třída
 // ─────────────────────────────────────────────────────────────────────────────
-
+ 
 /**
  * AktivitaZaznam – abstraktní rodičovská třída.
  * Obsahuje společné vlastnosti všech aktivit a předepisuje
@@ -22,10 +22,10 @@ export abstract class AktivitaZaznam {
   protected id: number;
   protected nazev: string;
   protected metHodnota: number;
-
+ 
   // private – přístupné pouze v této třídě, potomci používají setter
   private _trvaniMin: number;
-
+ 
   /**
    * Konstruktor – inicializuje společné vlastnosti aktivity.
    * @param id         - ID aktivity z číselníku
@@ -35,7 +35,7 @@ export abstract class AktivitaZaznam {
    */
   constructor(id: number, nazev: string, trvaniMin: number, metHodnota: number) {
     this.id = id;
-
+ 
     // Validace: název nesmí být prázdný
     if (nazev.trim() === "") {
       console.error("Název aktivity nesmí být prázdný! Použit výchozí název.");
@@ -43,18 +43,19 @@ export abstract class AktivitaZaznam {
     } else {
       this.nazev = nazev;
     }
-
+ 
     this.metHodnota = metHodnota;
-    this._trvaniMin = 0;          // inicializace před použitím setteru
-    this.trvaniMin = trvaniMin;   // použití setteru pro validaci
+    this._trvaniMin = 0;        // inicializace před použitím setteru
+    this.trvaniMin = trvaniMin; // použití setteru pro validaci
   }
-
-
+ 
+  // ── Getter a setter pro trvaniMin ───────────────────────────────────────
+ 
   /** Vrátí délku trvání aktivity v minutách. */
   public get trvaniMin(): number {
     return this._trvaniMin;
   }
-
+ 
   /**
    * Setter pro trvaniMin – zajišťuje, že trvání bude vždy kladné číslo.
    * Záporné nebo nulové hodnoty jsou automaticky opraveny na 1 minutu.
@@ -67,25 +68,25 @@ export abstract class AktivitaZaznam {
       this._trvaniMin = hodnota;
     }
   }
-
+ 
   // ── Veřejné metody ───────────────────────────────────────────────────────
-
+ 
   /** Vrátí název aktivity. */
   public getNazev(): string {
     return this.nazev;
   }
-
+ 
   /** Vrátí ID aktivity. */
   public getId(): number {
     return this.id;
   }
-
+ 
   /**
    * ABSTRAKTNÍ METODA – každý potomek ji musí implementovat po svém.
    * Vypočítá a vrátí počet spálených kilokalorií pro danou aktivitu.
    */
   public abstract spaliKcal(): number;
-
+ 
   /**
    * Polymorfní metoda – vrátí textový souhrn záznamu.
    * Interně volá spaliKcal(), čímž využívá polymorfismus –
@@ -95,11 +96,11 @@ export abstract class AktivitaZaznam {
     return `[${this.nazev}] Trvání: ${this._trvaniMin} min | Spáleno: ${this.spaliKcal()} kcal`;
   }
 }
-
+ 
 // ─────────────────────────────────────────────────────────────────────────────
 // Potomek 1: KardioAktivita
 // ─────────────────────────────────────────────────────────────────────────────
-
+ 
 /**
  * KardioAktivita – reprezentuje vytrvalostní aktivity (běh, plavání, kolo…).
  * Kalorický výdej se počítá pomocí MET vzorce:
@@ -109,7 +110,7 @@ export class KardioAktivita extends AktivitaZaznam {
   private rychlostKmh: number;
   private vzdalenostKm: number;
   private _vahaKg: number;
-
+ 
   /**
    * @param id           - ID z číselníku
    * @param nazev        - název aktivity
@@ -135,15 +136,17 @@ export class KardioAktivita extends AktivitaZaznam {
     this._vahaKg      = 0;
     this.vahaKg       = vahaKg; // setter pro validaci
   }
-
+ 
   // ── Getter a setter pro vahaKg ──────────────────────────────────────────
-
+ 
+  /** Vrátí tělesnou hmotnost uživatele v kg. */
   public get vahaKg(): number {
     return this._vahaKg;
   }
-
+ 
   /**
    * Setter pro tělesnou hmotnost – musí být v reálném rozsahu 20–300 kg.
+   * Hodnoty mimo rozsah jsou automaticky opraveny na výchozích 70 kg.
    */
   public set vahaKg(hodnota: number) {
     if (hodnota < 20 || hodnota > 300) {
@@ -153,7 +156,7 @@ export class KardioAktivita extends AktivitaZaznam {
       this._vahaKg = hodnota;
     }
   }
-
+ 
   /**
    * Implementace abstraktní metody – MET vzorec pro kardio aktivity.
    * Výsledek je zaokrouhlen na celé číslo.
@@ -161,7 +164,7 @@ export class KardioAktivita extends AktivitaZaznam {
   public spaliKcal(): number {
     return Math.round((this.metHodnota * this._vahaKg * this.trvaniMin) / 60);
   }
-
+ 
   /**
    * Přepisuje rodičovský getSouhrn() – přidává informaci o vzdálenosti a rychlosti.
    */
@@ -174,11 +177,11 @@ export class KardioAktivita extends AktivitaZaznam {
     );
   }
 }
-
+ 
 // ─────────────────────────────────────────────────────────────────────────────
 // Potomek 2: SilovaAktivita
 // ─────────────────────────────────────────────────────────────────────────────
-
+ 
 /**
  * SilovaAktivita – reprezentuje silový trénink (posilování, crossfit…).
  * Kalorický výdej se počítá z objemu zátěže:
@@ -188,10 +191,10 @@ export class SilovaAktivita extends AktivitaZaznam {
   private _pocetSerii: number;
   private _opakovani: number;
   private _zatezKg: number;
-
-  // Koeficient kalibrace pro silový trénink střední intenzity
+ 
+  // Kalibrační koeficient pro silový trénink střední intenzity
   private static readonly KOEFICIENT = 0.05;
-
+ 
   /**
    * @param id          - ID z číselníku
    * @param nazev       - název aktivity
@@ -219,9 +222,14 @@ export class SilovaAktivita extends AktivitaZaznam {
     this.opakovani  = opakovani;
     this.zatezKg    = zatezKg;
   }
-
-  // ── Settery s validací ──────────────────────────────────────────────────
-
+ 
+  // ── Gettery a settery s validací ────────────────────────────────────────
+ 
+  /** Vrátí počet sérií. */
+  public get pocetSerii(): number {
+    return this._pocetSerii;
+  }
+ 
   /** Počet sérií musí být alespoň 1. */
   public set pocetSerii(hodnota: number) {
     if (hodnota < 1) {
@@ -231,7 +239,12 @@ export class SilovaAktivita extends AktivitaZaznam {
       this._pocetSerii = Math.round(hodnota);
     }
   }
-
+ 
+  /** Vrátí počet opakování v sérii. */
+  public get opakovani(): number {
+    return this._opakovani;
+  }
+ 
   /** Počet opakování musí být alespoň 1. */
   public set opakovani(hodnota: number) {
     if (hodnota < 1) {
@@ -241,7 +254,12 @@ export class SilovaAktivita extends AktivitaZaznam {
       this._opakovani = Math.round(hodnota);
     }
   }
-
+ 
+  /** Vrátí pracovní zátěž v kg. */
+  public get zatezKg(): number {
+    return this._zatezKg;
+  }
+ 
   /** Zátěž musí být kladné číslo. */
   public set zatezKg(hodnota: number) {
     if (hodnota <= 0) {
@@ -251,7 +269,7 @@ export class SilovaAktivita extends AktivitaZaznam {
       this._zatezKg = hodnota;
     }
   }
-
+ 
   /**
    * Implementace abstraktní metody – výpočet z objemu zátěže.
    * Výsledek je zaokrouhlen na celé číslo.
@@ -261,7 +279,10 @@ export class SilovaAktivita extends AktivitaZaznam {
       this._pocetSerii * this._opakovani * this._zatezKg * SilovaAktivita.KOEFICIENT
     );
   }
-
+ 
+  /**
+   * Přepisuje rodičovský getSouhrn() – přidává informaci o sériích a zátěži.
+   */
   public getSouhrn(): string {
     return (
       `[SILOVÁ] ${this.nazev} | ` +
