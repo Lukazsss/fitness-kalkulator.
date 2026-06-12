@@ -164,6 +164,6 @@ console.log(`Silové aktivity (${silovaAktivity.length}):`);
 silovaAktivity.forEach((a) => console.log(`  → ${a.getSouhrn()}`));
 
 console.log("");
-console.log("╔══════════════════════════════════════════════════════════╗");
-console.log("║  Veškerá logika funguje správně. Fáze 2 dokončena.      ║");
-console.log("╚══════════════════════════════════════════════════════════╝");
+console.log("");
+console.log("");
+console.log("");
